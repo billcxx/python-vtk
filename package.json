@@ -1,5 +1,5 @@
 {
-    "name": "MUPRO to vtk",
+    "name": "mupro2vtk",
     "version": "1.0.0",
     "description": "A gilab page for processing data into vtk compatible format",
     "main": "index.js",

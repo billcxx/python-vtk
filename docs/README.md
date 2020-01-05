@@ -2,7 +2,7 @@
 Create a **Data** class that convert between *.dat* data file, numpy array, and *.vtk* file
 
 # Prerequisite
-1. **python**, if you have never used python before, I recomment trying the *Anaconda Distribution* [https://www.anaconda.com/distribution/](https://www.anaconda.com/distribution/)
+1. **python**, if you have never used python before, I recomment trying the *Anaconda Distribution*  [https://www.anaconda.com/distribution/](https://www.anaconda.com/distribution/)
 2. **paraview**, [https://www.paraview.org/download/](https://www.paraview.org/download/)
 
 # Folder and Files
@@ -24,3 +24,11 @@ data.get_vtk_file('test_scalar.vtk') # Output the vtk file
 ```
 
 # Visualization
+## Scalar
+![](vuepress/Scalar.png)
+
+## Vector
+![](vuepress/Vector.png)
+
+## Domain
+![](vuepress/Domain.png)

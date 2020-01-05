@@ -3,6 +3,7 @@ output/
 node_modules
 /public/
 
+yarn.lock
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
