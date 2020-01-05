@@ -25,10 +25,10 @@ data.get_vtk_file('test_scalar.vtk') # Output the vtk file
 
 # Visualization
 ## Scalar
-![](vuepress/Scalar.png)
+![](/Scalar.png)
 
 ## Vector
-![](vuepress/Vector.png)
+![](/Vector.png)
 
 ## Domain
-![](vuepress/Domain.png)
+![](/Domain.png)
