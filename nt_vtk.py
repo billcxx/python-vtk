@@ -232,10 +232,8 @@ class Data(object):
 
         return domainIndex
 
-    def __write_vtk_scalar__(self,file_name,data,data_index):
+    def __write_vtk_scalar__(self,file_name,data):
         nx,ny,nz,scalar_i=data.shape
-        if scalar_i <= data_index:
-            print("The scalar index you choose is larger than the scalar file you have, please check the data array") 
         nn=nx*ny*nz
         file=open(file_name,"w")
         file.write("# vtk DataFile Version 3.0\n")
@@ -243,27 +241,27 @@ class Data(object):
         file.write("ASCII\n")
         file.write("\n")
         file.write("DATASET STRUCTURED_POINTS\n")
-        dimension="DIMENSIONS "+str(nz)+" "+str(ny)+" "+str(nx)
+        dimension="DIMENSIONS "+str(nx)+" "+str(ny)+" "+str(nz)
         file.write(dimension+"\n")
         file.write("ORIGIN 1 1 1\n")
         file.write("SPACING 1 1 1\n")
-        file.write("\n")
         file.write(("POINT_DATA "+str(nn)+"\n"))
-        file.write(("SCALARS scalars float\n"))
-        file.write(("LOOKUP_TABLE default\n"))
+        file.write("\n")
         file.close()
 
-        file=open(file_name,"a")
-        for i in range(0,nx):
-            for j in range(0,ny):
-                for k in range(0,nz):
-                    file.write((str(data[i][j][k][data_index])+"\n"))
-        file.close()
+        for data_index in range(0,scalar_i):
+            file=open(file_name,"a")
+            file.write("SCALARS scalars%i float\n" % (data_index))
+            file.write(("LOOKUP_TABLE default\n"))
+            for k in range(0,nz):
+                for j in range(0,ny):
+                    for i in range(0,nx):
+                        file.write((str(data[i][j][k][data_index])+"\n"))
+            file.write("\n")
+            file.close()
 
-    def __write_vtk_vector__(self,file_name,data,data_index):
+    def __write_vtk_vector__(self,file_name,data):
         nx,ny,nz,vector_i,vector_dim=data.shape
-        if vector_i <= data_index:
-            print("The vector index you choose is larger than the vector file you have, please check the data array") 
         nn=nx*ny*nz
         file=open(file_name,"w")
         file.write("# vtk DataFile Version 3.0\n")
@@ -271,24 +269,26 @@ class Data(object):
         file.write("ASCII\n")
         file.write("\n")
         file.write("DATASET STRUCTURED_POINTS\n")
-        dimension="DIMENSIONS "+str(nz)+" "+str(ny)+" "+str(nx)
+        dimension="DIMENSIONS "+str(nx)+" "+str(ny)+" "+str(nz)
         file.write(dimension+"\n")
         file.write("ORIGIN 0 0 0\n")
         file.write("SPACING 1 1 1\n")
+        file.write(("POINT_DATA "+str(nn)+"\n"))
         #file.write(("points "+str(nn)+" float\n"))
         file.write("\n")
-        file.write(("POINT_DATA "+str(nn)+"\n"))
-        file.write(("VECTORS vector float\n"))
-        file.write(("LOOKUP_TABLE default\n"))
+        # file.write(("LOOKUP_TABLE default\n"))
         file.close()
 
-        file=open(file_name,"a")
-        for i in range(0,nx):
-            for j in range(0,ny):
-                for k in range(0,nz):
-                    dat = data[i][j][k][data_index]
-                    file.write((str(dat[0])+" "+str(dat[1])+" "+str(dat[2])+"\n"))
-        file.close()
+        for data_index in range(0,vector_i):
+            file=open(file_name,"a")
+            file.write("VECTORS vector%i float\n" % (data_index))
+            for k in range(0,nz):
+                for j in range(0,ny):
+                    for i in range(0,nx):
+                        dat = data[i][j][k][data_index]
+                        file.write((str(dat[0])+" "+str(dat[1])+" "+str(dat[2])+"\n"))
+            file.write("\n")
+            file.close()
 
     def __write_vtk_domain__(self,file_name,data):
         nx,ny,nz=data.shape
@@ -299,30 +299,34 @@ class Data(object):
         file.write("ASCII\n")
         file.write("\n")
         file.write("DATASET STRUCTURED_POINTS\n")
-        dimension="DIMENSIONS "+str(nz)+" "+str(ny)+" "+str(nx)
+        dimension="DIMENSIONS "+str(nx)+" "+str(ny)+" "+str(nz)
         file.write(dimension+"\n")
         file.write("ORIGIN 1 1 1\n")
         file.write("SPACING 1 1 1\n")
         file.write("\n")
         file.write(("POINT_DATA "+str(nn)+"\n"))
         file.write(("SCALARS scalars float\n"))
-        file.write(("LOOKUP_TABLE default\n"))
+        file.write(("LOOKUP_TABLE mupro\n"))
         file.close()
 
         file=open(file_name,"a")
-        for i in range(0,nx):
+        for k in range(0,nz):
             for j in range(0,ny):
-                for k in range(0,nz):
+                for i in range(0,nx):
                     file.write((str(data[i][j][k])+"\n"))
         file.close()
 
         file=open(file_name,"a")
-        file.write("\n")
-        for i in range(0,nx):
-            for j in range(0,ny):
-                for k in range(0,nz):
-                    dat = self.__get_domain_rgb__(data[i][j][k])
-                    file.write((str(dat[0])+" "+str(dat[1])+" "+str(dat[2])+"\n"))       
+        file.write("\nLOOKUP_TABLE mupro 27\n")
+        file.write(("1 1 1 0\n"))    
+        for i in range(0,27):
+            dat = self.domain_rgb[i]
+            file.write((str(dat[0])+" "+str(dat[1])+" "+str(dat[2])+" 1\n"))    
+        # for i in range(0,nx):
+        #     for j in range(0,ny):
+        #         for k in range(0,nz):
+        #             dat = self.__get_domain_rgb__(data[i][j][k])
+        #             file.write((str(dat[0])+" "+str(dat[1])+" "+str(dat[2])+"\n"))       
         file.close()
 
     def __write_dat_scalar__(self,file_name,data):
@@ -387,11 +391,11 @@ class Data(object):
         self.data = data
         return data
 
-    def __array_2_vtk__(self,file_name,data,data_index):
+    def __array_2_vtk__(self,file_name,data):
         if self.data_type == SCALAR:
-            self.__write_vtk_scalar__(file_name,data,data_index)
+            self.__write_vtk_scalar__(file_name,data)
         elif self.data_type == VECTOR:
-            self.__write_vtk_vector__(file_name,data,data_index)
+            self.__write_vtk_vector__(file_name,data)
         elif self.data_type == DOMAIN:
             self.__write_vtk_domain__(file_name,data)
         else:
@@ -413,8 +417,8 @@ class Data(object):
     def get_dat_file(self,out_file):
         self.__array_2_dat__(out_file,self.data)
 
-    def get_vtk_file(self,out_file,data_index):
-        self.__array_2_vtk__(out_file,self.data,data_index)
+    def get_vtk_file(self,out_file):
+        self.__array_2_vtk__(out_file,self.data)
 
 
 
