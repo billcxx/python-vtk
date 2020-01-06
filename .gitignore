@@ -3,6 +3,8 @@ output/
 node_modules
 /public/
 
+release/
+
 yarn.lock
 
 # Byte-compiled / optimized / DLL files
