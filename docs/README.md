@@ -29,10 +29,10 @@ data.get_vtk_file('test_scalar.vtk') # Output the vtk file
 
 # Visualization
 ## Scalar
-![](/python-vtk/Scalar.png)
+![](/Scalar.png)
 
 ## Vector
-![](/python-vtk/Vector.png)
+![](/Vector.png)
 
 ## Domain
-![](/python-vtk/Domain.png)
+![](/Domain.png)
